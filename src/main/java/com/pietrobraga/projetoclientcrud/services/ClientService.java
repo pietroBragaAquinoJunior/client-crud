@@ -1,11 +1,12 @@
 package com.pietrobraga.projetoclientcrud.services;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.pietrobraga.projetoclientcrud.dto.ClientDTO;
 import com.pietrobraga.projetoclientcrud.entities.Client;
 import com.pietrobraga.projetoclientcrud.repositories.ClientRepository;
 
@@ -16,8 +17,9 @@ public class ClientService {
 	ClientRepository repo;
 	
 	@Transactional(readOnly = true)
-	public List<Client> findAll(){
-		return repo.findAll();
+	public Page<ClientDTO> findAllPaged(PageRequest pageRequest){
+		Page<Client> clients = repo.findAll(pageRequest);
+		return clients.map(x -> new ClientDTO(x));
 	}
 	
 }
